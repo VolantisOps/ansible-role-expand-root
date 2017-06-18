@@ -1,0 +1,6 @@
+---
+expand_root: false
+expand_root_device: /dev/mmcblk0
+expand_root_device_partition: /dev/mmcblk0p2
+expand_root_partition_number: 2
+expand_root_minimum_size: 3221225472 # 3 GB

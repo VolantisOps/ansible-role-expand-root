@@ -1,0 +1,18 @@
+---
+- name: Install admin tools
+  pacman: "name={{ item }} state=present"
+  with_items:
+    - parted
+  when: expand_root
+
+- name: Assert root partition is expanded
+  assert: { that: item.mount != '/' or item.size_total > expand_root_minimum_size }
+  with_items: "{{ ansible_mounts }}"
+  ignore_errors: yes
+  register: expand_root_expanded
+  when: expand_root
+
+- name: Expand root partition
+  command: "parted {{ expand_root_device }} resizepart {{ expand_root_partition_number }} 100%"
+  when: expand_root and expand_root_expanded|failed
+  notify: Expand root filesystem
